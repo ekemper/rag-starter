@@ -7,3 +7,5 @@ numpy
 flask
 werkzeug
 pytest
+watchdog
+python-dotenv

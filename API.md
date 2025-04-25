@@ -20,13 +20,33 @@ pip install -r requirements.txt
 ```
 
 ### Running the API
-Start the API server:
+
+#### Production Mode
+Start the API server normally:
 ```bash
 python api.py
 ```
-The server will start on `http://localhost:5001` by default.
 
-Note: We use port 5001 instead of 5000 to avoid conflicts with other services (particularly on macOS where port 5000 is often used by AirTunes/AirPlay).
+#### Development Mode (with Hot Reload)
+For local development with automatic reloading on file changes:
+
+1. Install development dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+2. Run the development server:
+```bash
+python run_dev.py
+```
+
+Features of development mode:
+- Automatic server restart when Python files change
+- Debug mode enabled
+- Detailed error pages
+- Real-time code reloading
+
+The server will start on `http://localhost:5001` and automatically restart when you make changes to any Python file in the project.
 
 ### Environment Variables
 No environment variables are required for basic file upload functionality. However, if you plan to use the RAG features, you'll need:
