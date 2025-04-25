@@ -1,0 +1,63 @@
+from flask import Flask, request, jsonify
+import os
+from werkzeug.utils import secure_filename
+from embedder import build_index
+from retriever import retrieve
+from generator import generate_response
+from typing import Tuple, Dict, Union, List
+import logging
+
+# Custom Exceptions - Define these at the top level
+class RAGError(Exception):
+    """Base exception for RAG-related errors"""
+    pass
+
+class RAGNotInitializedError(RAGError):
+    """Raised when RAG system is not properly initialized"""
+    pass
+
+class QueryProcessingError(RAGError):
+    """Raised when there's an error processing a query"""
+    pass
+
+app = Flask(__name__)
+
+# Configuration
+UPLOAD_FOLDER = 'data/docs'
+ALLOWED_EXTENSIONS = {'txt'}
+
+def validate_query(query: str) -> Tuple[bool, str]:
+    """
+    Validate the query string against defined constraints.
+    
+    Args:
+        query (str): The query string to validate
+        
+    Returns:
+        Tuple[bool, str]: A tuple containing:
+            - bool: True if valid, False if invalid
+            - str: Empty string if valid, error message if invalid
+    """
+    if not query:
+        return False, "Query cannot be empty"
+    if len(query) < MIN_QUERY_LENGTH:
+        return False, f"Query must be at least {MIN_QUERY_LENGTH} characters long"
+    if len(query) > MAX_QUERY_LENGTH:
+        return False, f"Query cannot exceed {MAX_QUERY_LENGTH} characters"
+    return True, ""
+
+# Add a new health check endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    """
+    Health check endpoint to verify API and RAG system status.
+    """
+    global docs, sources
+    
+    status = {
+        'api_status': 'healthy',
+        'rag_initialized': docs is not None and sources is not None,
+        'documents_count': len(os.listdir(UPLOAD_FOLDER)) if os.path.exists(UPLOAD_FOLDER) else 0
+    }
+    
+    return jsonify(status), 200 

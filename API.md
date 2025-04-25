@@ -136,18 +136,117 @@ response = requests.post(url, files=files)
 print(response.json())
 ```
 
-## Running Tests
-To run the test suite:
+### Query RAG System
+Query the RAG system with a question to get an AI-generated response based on the uploaded documents.
 
-1. Install test dependencies:
+**URL**: `/query`
+**Method**: `POST`
+**Content-Type**: `application/json`
+
+#### Request Body
+```json
+{
+    "query": "Your question here"
+}
+```
+
+#### Responses
+
+##### Success Response
+**Code**: `200 OK`
+```json
+{
+    "response": "AI-generated answer to your question",
+    "sources": ["document1.txt", "document2.txt"]  // Source documents used for the response
+}
+```
+
+##### Error Responses
+**Code**: `400 BAD REQUEST`
+```json
+{
+    "error": "No query provided"
+}
+```
+
+**Code**: `500 INTERNAL SERVER ERROR`
+```json
+{
+    "error": "RAG system not initialized properly"
+}
+```
+OR
+```json
+{
+    "error": "Error processing query: [error details]"
+}
+```
+
+### Example Usage
+
+1. Upload a document:
+```bash
+curl -X POST -F "file=@document.txt" http://localhost:5001/upload
+```
+
+2. Query the system:
+```bash
+curl -X POST -H "Content-Type: application/json" \
+     -d '{"query":"What is the main topic of the document?"}' \
+     http://localhost:5001/query
+```
+
+Using Python:
+```python
+import requests
+
+# Upload document
+files = {'file': open('document.txt', 'rb')}
+upload_response = requests.post('http://localhost:5001/upload', files=files)
+
+# Query the system
+query = {'query': 'What is the main topic of the document?'}
+query_response = requests.post('http://localhost:5001/query', json=query)
+print(query_response.json())
+```
+
+The new implementation:
+1. Automatically initializes the RAG system on startup
+2. Reindexes documents when new files are uploaded
+3. Provides detailed error messages
+4. Returns both the response and the source documents used
+5. Maintains proper state management for the RAG system
+
+Would you like me to:
+1. Add more error handling?
+2. Add rate limiting?
+3. Add caching for frequent queries?
+4. Add any other features to the API?
+
+## Running Tests
+
+### Prerequisites
+Ensure you have the test dependencies installed:
 ```bash
 pip install pytest
 ```
 
-2. Run tests:
+### Running the Test Suite
+To run the tests with clean output:
 ```bash
-pytest tests/test_api.py -v
+pytest tests/test_api.py -v --disable-warnings > tests/last_test_run.log 2>&1
 ```
+
+This command:
+- Runs all tests in verbose mode (`-v`)
+- Suppresses all warning messages (`--disable-warnings`)
+- Saves complete output to `tests/last_test_run.log`
+- Captures both standard output and errors (`2>&1`)
+
+### Reviewing Test Results
+- Tests will run with real-time output in your terminal
+- Complete test output, including any errors, will be saved in `tests/last_test_run.log`
+- The log file is useful for debugging and documentation purposes
 
 ## Error Handling
 - The API only accepts .txt files

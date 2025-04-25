@@ -66,4 +66,7 @@ index/
 !example.env
 
 # Jupyter Notebook
-.ipynb_checkpoints 
+.ipynb_checkpoints
+
+# Test logs
+tests/last_test_run.log 
