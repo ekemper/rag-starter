@@ -3,7 +3,47 @@
 ## Overview
 This API provides endpoints for uploading documents to be processed by the RAG (Retrieval-Augmented Generation) system.
 
-## Base URL 
+## Setup and Running the API
+
+### Installation
+1. Clone the repository and navigate to the project directory
+
+2. Create and activate a virtual environment (recommended):
+```bash
+python3 -m venv .venv
+source .venv/bin/activate  # On Windows, use `.venv\Scripts\activate`
+```
+
+3. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+### Running the API
+Start the API server:
+```bash
+python api.py
+```
+The server will start on `http://localhost:5000` by default.
+
+### Environment Variables
+No environment variables are required for basic file upload functionality. However, if you plan to use the RAG features, you'll need:
+- `OPENAI_API_KEY`: Your OpenAI API key
+
+### Directory Structure
+The API will automatically create required directories:
+- `data/docs/`: Where uploaded text files are stored
+
+### Health Check
+Once the server is running, you can verify it's working by:
+1. Opening a browser to `http://localhost:5000`
+2. Using curl:
+```bash
+curl http://localhost:5000/upload
+```
+You should receive a 400 response indicating the endpoint is working but requires a file upload.
+
+## Base URL
 
 ## Endpoints
 
