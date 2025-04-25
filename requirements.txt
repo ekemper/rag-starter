@@ -1,5 +1,9 @@
-openai
+openai>=1.0.0
 faiss-cpu
 python-dotenv
 tiktoken
 unstructured
+numpy
+flask
+werkzeug
+pytest
