@@ -24,7 +24,9 @@ Start the API server:
 ```bash
 python api.py
 ```
-The server will start on `http://localhost:5000` by default.
+The server will start on `http://localhost:5001` by default.
+
+Note: We use port 5001 instead of 5000 to avoid conflicts with other services (particularly on macOS where port 5000 is often used by AirTunes/AirPlay).
 
 ### Environment Variables
 No environment variables are required for basic file upload functionality. However, if you plan to use the RAG features, you'll need:
@@ -36,10 +38,10 @@ The API will automatically create required directories:
 
 ### Health Check
 Once the server is running, you can verify it's working by:
-1. Opening a browser to `http://localhost:5000`
+1. Opening a browser to `http://localhost:5001`
 2. Using curl:
 ```bash
-curl http://localhost:5000/upload
+curl http://localhost:5001/upload
 ```
 You should receive a 400 response indicating the endpoint is working but requires a file upload.
 
@@ -101,14 +103,14 @@ OR
 
 ### Using cURL
 ```bash
-curl -X POST -F "file=@/path/to/your/document.txt" http://localhost:5000/upload
+curl -X POST -F "file=@/path/to/your/document.txt" http://localhost:5001/upload
 ```
 
 ### Using Python Requests
 ```python
 import requests
 
-url = 'http://localhost:5000/upload'
+url = 'http://localhost:5001/upload'
 files = {'file': open('document.txt', 'rb')}
 response = requests.post(url, files=files)
 print(response.json())
