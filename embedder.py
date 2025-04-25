@@ -1,19 +1,19 @@
 import os
-import openai
 import faiss
 import numpy as np
 from dotenv import load_dotenv
+from openai import OpenAI
 from unstructured.partition.auto import partition
 
 load_dotenv()
-openai.api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def get_embeddings(texts):
-    response = openai.Embedding.create(
+    response = client.embeddings.create(
         model="text-embedding-ada-002",
         input=texts
     )
-    return [e['embedding'] for e in response['data']]
+    return [e.embedding for e in response.data]
 
 def build_index(doc_folder="data/docs/"):
     documents, sources = [], []

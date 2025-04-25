@@ -1,3 +1,7 @@
+import warnings
+import urllib3.exceptions
+warnings.filterwarnings("ignore", category=urllib3.exceptions.NotOpenSSLWarning)
+
 from embedder import build_index
 from retriever import retrieve
 from generator import generate_response
